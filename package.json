@@ -1,7 +1,8 @@
 {
   "name": "@xuanmo/d-table",
   "description": "基于 Element-UI Table 二次封装表格。",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "main": "src/index.js",
   "private": false,
   "license": "MIT",
   "repository": {
