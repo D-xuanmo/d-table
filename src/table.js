@@ -1,0 +1,171 @@
+import {
+  Table,
+  TableColumn,
+  Pagination
+} from 'element-ui'
+
+export default {
+  name: 'DTable',
+
+  components: {
+    Table,
+    TableColumn,
+    Pagination
+  },
+
+  props: {
+    // 生成表格数据
+    requestMethod: {
+      type: Function,
+      required: true,
+      default: () => {
+      }
+    },
+    props: {
+      type: Object,
+      default: () => ({})
+    },
+    beforeCreateHeader: {
+      type: Function,
+      default: () => {}
+    },
+    creatingHeader: {
+      type: Function,
+      default: () => {}
+    },
+
+    // 用于继承 element-ui pagination 属性
+    paginationConfig: {
+      type: Object,
+      default: () => ({})
+    },
+    showPagination: {
+      type: Boolean,
+      default: true
+    },
+    paginationLayout: {
+      type: String,
+      default: 'total, sizes, prev, pager, next, jumper'
+    },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    pageSizes: {
+      type: Array,
+      default: () => [10, 20, 40, 60, 100]
+    }
+  },
+
+  data() {
+    return {
+      tableHeader: [],
+      tableData: [],
+      total: 0,
+      page: 1
+    }
+  },
+
+  computed: {
+    innerProps() {
+      return {
+        header: this.props.header || 'header',
+        data: this.props.data || 'data',
+        page: this.props.page || 'page',
+        pageSize: this.props.pageSize || 'pageSize',
+        total: this.props.total || 'total'
+      }
+    },
+
+    // 表格配置
+    innerTableConfig() {
+      return {
+        ...(this.$DTable?.tableConfig || {}),
+        ...this.$attrs
+      }
+    },
+
+    // 分页配置
+    innerPaginationConfig() {
+      return {
+        ...(this.$DTable?.paginationConfig || {}),
+        ...this.paginationConfig
+      }
+    }
+  },
+
+  created() {
+    this.init()
+  },
+
+  methods: {
+    reload() {
+      this.page = 1
+      this.init()
+    },
+
+    async init() {
+      const result = await this.requestMethod({
+        [this.innerProps.page]: this.page,
+        [this.innerProps.pageSize]: this.pageSize,
+      })
+      this.tableHeader = this.createHeader(result[this.innerProps.header])
+      this.tableData = result[this.innerProps.data]
+      this.total = result[this.innerProps.total] || 0
+      this.page = result[this.innerProps.page] || 1
+      this.pageSize = result[this.innerProps.pageSize] || 10
+    },
+
+    // 创建表头
+    createHeader(header) {
+      typeof this.beforeCreateHeader === 'function' && this.beforeCreateHeader(header)
+
+      if (Array.isArray(header)) {
+        header.map((item, index) => {
+          if (typeof this.creatingHeader === 'function') {
+            item = this.creatingHeader(item, index)
+          }
+          return item
+        })
+      }
+      return header
+    }
+  },
+
+  render() {
+    return <div class="d-table__wrapper">
+      <Table
+        data={ this.tableData }
+        attrs={ this.innerTableConfig }
+        on={ this.$listeners }
+      >
+        {
+          this.tableHeader.map((header, index) => {
+            const slotName = header.slotName || header.column
+            return <TableColumn
+              attrs={ header }
+              key={ index }
+              prop={ header.column }
+              label={ header.name }
+            >
+              {
+                this.$scopedSlots[slotName] && this.$scopedSlots[slotName]
+              }
+            </TableColumn>
+          })
+        }
+      </Table>
+
+      {
+        this.showPagination && <Pagination
+          class="d-table__pagination"
+          attrs={ this.innerPaginationConfig }
+          layout={ this.paginationLayout }
+          current-page={ this.page }
+          total={ this.total }
+          page-sizes={ this.pageSizes }
+        ></Pagination>
+      }
+    </div>
+  }
+}
