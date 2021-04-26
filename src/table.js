@@ -3,6 +3,10 @@ import {
   TableColumn,
   Pagination
 } from 'element-ui'
+import {
+  moneyFormat,
+  isEmpty
+} from './utils'
 
 export default {
   name: 'DTable',
@@ -31,7 +35,12 @@ export default {
     },
     creatingHeader: {
       type: Function,
-      default: () => {}
+      default: header => header
+    },
+
+    selection: {
+      type: Boolean,
+      default: false
     },
 
     // 用于继承 element-ui pagination 属性
@@ -121,10 +130,30 @@ export default {
       typeof this.beforeCreateHeader === 'function' && this.beforeCreateHeader(header)
 
       if (Array.isArray(header)) {
+        // 显示复选框
+        if (this.selection) {
+          header.unshift({
+            type: 'selection',
+            column: 'selection',
+            align: 'center'
+          })
+        }
+
         header.map((item, index) => {
           if (typeof this.creatingHeader === 'function') {
             item = this.creatingHeader(item, index)
           }
+
+          /* eslint-disable */
+          switch(item.formatType) {
+            case 'money':
+              item.formatter = (row, column, cellValue) => `${moneyFormat(cellValue)}`
+              break
+            case 'percent':
+              item.formatter = (row, column, cellValue) => isEmpty(cellValue) ? '' : `${cellValue}%`
+              break
+          }
+          /* eslint-disable */
           return item
         })
       }

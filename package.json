@@ -1,7 +1,7 @@
 {
   "name": "@xuanmo/d-table",
   "description": "基于 Element-UI Table 二次封装表格。",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "src/index.js",
   "private": false,
   "license": "MIT",
@@ -10,6 +10,7 @@
     "url": "https://github.com/D-xuanmo/d-table"
   },
   "author": "xuanmo <me@xuanmo.xin>",
+  "keywords": ["table", "el-table"],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

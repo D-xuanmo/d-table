@@ -1,5 +1,7 @@
 # 基于 Element-UI Table 二次封装表格
 
+> 具体示例参考 `example` 目录
+
 ## 安装
 
 ```base
@@ -94,7 +96,8 @@ export default {
 |request-method|数据源，具体返回参数说明参考 `props`|Function|() => ({ header: [], data: [] })|Y|
 |props|配置选项，具体参考下表说明|Object|参考下表|N|
 |before-create-header|表头生成之前|Function(header)|-|N|
-creating-header|表头执行创建中|Function(item, index)|-|N|
+|creating-header|表头执行创建中|Function(item, index)|-|N|
+|selection|是否展示复选框|Boolean|false|N|
 |pagination-config|继承 `el-pagination` 属性|Object|{}|N|
 |show-pagination|是否展示分页功能|Boolean|true|N|
 |pagination-layout|分页布局|String|total, sizes, prev, pager, next, jumper|N|
@@ -126,3 +129,11 @@ creating-header|表头执行创建中|Function(item, index)|-|N|
 |方法名|说明|参数|
 |---|---|---|
 |reload|重新渲染表格|-|
+
+## 特殊参数说明
+> `header` 每项支持 `formatType` 属性，用于格式化当前列的值，目前支持的具体值如下：
+
+|值|说明|
+|---|---|
+|money|千分位|
+|percent|百分号|
