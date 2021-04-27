@@ -207,7 +207,7 @@ export default {
         this.showPagination && <Pagination
           class="d-table__pagination"
           layout={ this.paginationLayout }
-          current-page={ this.page }
+          current-page_sync={ this.page }
           total={ this.total }
           page-sizes={ this.pageSizes }
           attrs={ this.innerPaginationConfig }
