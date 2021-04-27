@@ -18,6 +18,10 @@ export default {
   },
 
   props: {
+    autoRequest: {
+      type: Boolean,
+      default: true
+    },
     // 生成表格数据
     requestMethod: {
       type: Function,
@@ -105,7 +109,7 @@ export default {
   },
 
   created() {
-    this.init()
+    this.autoRequest && this.init()
   },
 
   methods: {

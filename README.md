@@ -96,6 +96,7 @@ export default {
 
 |参数|说明|类型|默认值|是否必填|
 |---|---|---|---|---|
+|auto-request|是否立即执行 `request` 方法|Boolean|true|N|
 |request-method|数据源，具体返回参数说明参考 `props`|Function|() => ({ header: [], data: [] })|Y|
 |props|配置选项，具体参考下表说明|Object|参考下表|N|
 |before-create-header|表头生成之前|Function(header)|-|N|
