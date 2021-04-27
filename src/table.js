@@ -78,11 +78,11 @@ export default {
   computed: {
     innerProps() {
       return {
-        header: this.props.header || 'header',
-        data: this.props.data || 'data',
-        page: this.props.page || 'page',
-        pageSize: this.props.pageSize || 'pageSize',
-        total: this.props.total || 'total'
+        header: this.props.header || this.$DTable?.props.header || 'header',
+        data: this.props.data || this.$DTable?.props.data || 'data',
+        page: this.props.page || this.$DTable?.props.page || 'page',
+        pageSize: this.props.pageSize || this.$DTable?.props.pageSize || 'pageSize',
+        total: this.props.total || this.$DTable?.props.total || 'total'
       }
     },
 
@@ -122,7 +122,7 @@ export default {
       this.tableData = result[this.innerProps.data]
       this.total = result[this.innerProps.total] || 0
       this.page = result[this.innerProps.page] || 1
-      this.pageSize = result[this.innerProps.pageSize] || 10
+      this.pageSize = result[this.innerProps.pageSize] || this.pageSizes[0]
     },
 
     // 创建表头

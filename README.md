@@ -26,7 +26,10 @@ module.exports = {
 ```
 
 ### 全局配置
-在引入 `DTable` 时，可以传入一个全局配置对象。该对象共支持 `tableConfig` 、 `paginationConfig` 两个字段。`tableConfig` 用于设置表格，参考 `el-table` 的属性；`paginationConfig` 用于设置分页，参考 `el-pagination` 的属性。
+在引入 `DTable` 时，可以传入一个全局配置对象。 该对象共支持 `tableConfig` 、 `paginationConfig`  `props` 三个字段。
+1. `tableConfig` 用于设置表格，参考 `el-table` 的属性；
+1. `paginationConfig` 用于设置分页，参考 `el-pagination` 的属性；
+1. `props` 具体说明见后续 props 章节。
 
 ### 在页面中使用
 #### 基础用法
