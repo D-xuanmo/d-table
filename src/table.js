@@ -71,7 +71,8 @@ export default {
       tableHeader: [],
       tableData: [],
       total: 0,
-      page: 1
+      page: 1,
+      innerPageSize: this.pageSize
     }
   },
 
@@ -116,13 +117,13 @@ export default {
     async init() {
       const result = await this.requestMethod({
         [this.innerProps.page]: this.page,
-        [this.innerProps.pageSize]: this.pageSize,
+        [this.innerProps.pageSize]: this.innerPageSize,
       })
       this.tableHeader = this.createHeader(result[this.innerProps.header])
       this.tableData = result[this.innerProps.data]
       this.total = result[this.innerProps.total] || 0
       this.page = result[this.innerProps.page] || 1
-      this.pageSize = result[this.innerProps.pageSize] || this.pageSizes[0]
+      this.innerPageSize = result[this.innerProps.pageSize] || this.pageSizes[0]
     },
 
     // 创建表头
@@ -158,6 +159,19 @@ export default {
         })
       }
       return header
+    },
+
+    currentPageChange(page) {
+      this.page = page
+      this.init()
+      this.$emit('current-page-change', page)
+    },
+
+    pageSizeChange(size) {
+      this.page = 1
+      this.innerPageSize = size
+      this.init()
+      this.$emit('page-size-change', size)
     }
   },
 
@@ -188,11 +202,13 @@ export default {
       {
         this.showPagination && <Pagination
           class="d-table__pagination"
-          attrs={ this.innerPaginationConfig }
           layout={ this.paginationLayout }
           current-page={ this.page }
           total={ this.total }
           page-sizes={ this.pageSizes }
+          attrs={ this.innerPaginationConfig }
+          vOn:current-change={ this.currentPageChange }
+          vOn:size-change={ this.pageSizeChange }
         ></Pagination>
       }
     </div>
