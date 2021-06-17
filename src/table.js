@@ -1,12 +1,5 @@
-import {
-  Table,
-  TableColumn,
-  Pagination
-} from 'element-ui'
-import {
-  moneyFormat,
-  isEmpty
-} from './utils'
+import { Table, TableColumn, Pagination } from 'element-ui'
+import { moneyFormat, isEmpty } from './utils'
 
 export default {
   name: 'DTable',
@@ -26,8 +19,7 @@ export default {
     requestMethod: {
       type: Function,
       required: true,
-      default: () => {
-      }
+      default: () => {}
     },
     props: {
       type: Object,
@@ -39,7 +31,7 @@ export default {
     },
     creatingHeader: {
       type: Function,
-      default: header => header
+      default: (header) => header
     },
 
     selection: {
@@ -121,7 +113,7 @@ export default {
     async init() {
       const result = await this.requestMethod({
         [this.innerProps.page]: this.page,
-        [this.innerProps.pageSize]: this.innerPageSize,
+        [this.innerProps.pageSize]: this.innerPageSize
       })
       this.tableHeader = this.createHeader(result[this.innerProps.header])
       this.tableData = result[this.innerProps.data]
@@ -132,7 +124,8 @@ export default {
 
     // 创建表头
     createHeader(header) {
-      typeof this.beforeCreateHeader === 'function' && this.beforeCreateHeader(header)
+      typeof this.beforeCreateHeader === 'function' &&
+        this.beforeCreateHeader(header)
 
       if (Array.isArray(header)) {
         // 显示复选框
@@ -150,7 +143,7 @@ export default {
           }
 
           /* eslint-disable */
-          switch(item.formatType) {
+          switch (item.formatType) {
             case 'money':
               item.formatter = (row, column, cellValue) => `${moneyFormat(cellValue)}`
               break
@@ -180,41 +173,49 @@ export default {
   },
 
   render() {
-    return <div class="d-table__wrapper">
-      <Table
-        data={ this.tableData }
-        attrs={ this.innerTableConfig }
-        on={ this.$listeners }
-      >
-        {
-          this.tableHeader.map((header, index) => {
-            const slotName = header.slotName || header.column
-            return <TableColumn
-              attrs={ header }
-              key={ index }
-              prop={ header.column }
-              label={ header.name }
-            >
-              {
-                this.$scopedSlots[slotName] && this.$scopedSlots[slotName]
-              }
-            </TableColumn>
-          })
-        }
-      </Table>
+    const headerRender = (headers) => {
+      return headers.map((item, index) => {
+        const slotName = item.slotName || item.column
+        return (
+          <TableColumn
+            attrs={item}
+            key={index}
+            prop={item.column}
+            label={item.name}
+          >
+            {
+              Array.isArray(item.children) && item.children.length
+                ? headerRender(item.children)
+                : this.$scopedSlots[slotName]
+            }
+          </TableColumn>
+        )
+      })
+    }
 
-      {
-        this.showPagination && <Pagination
-          class="d-table__pagination"
-          layout={ this.paginationLayout }
-          current-page_sync={ this.page }
-          total={ this.total }
-          page-sizes={ this.pageSizes }
-          attrs={ this.innerPaginationConfig }
-          vOn:current-change={ this.currentPageChange }
-          vOn:size-change={ this.pageSizeChange }
-        ></Pagination>
-      }
-    </div>
+    return (
+      <div class="d-table__wrapper">
+        <Table
+          data={this.tableData}
+          attrs={this.innerTableConfig}
+          on={this.$listeners}
+        >
+          { headerRender(this.tableHeader) }
+        </Table>
+
+        {this.showPagination && (
+          <Pagination
+            class="d-table__pagination"
+            layout={this.paginationLayout}
+            current-page_sync={this.page}
+            total={this.total}
+            page-sizes={this.pageSizes}
+            attrs={this.innerPaginationConfig}
+            vOn:current-change={this.currentPageChange}
+            vOn:size-change={this.pageSizeChange}
+          />
+        )}
+      </div>
+    )
   }
 }
