@@ -34,7 +34,7 @@ module.exports = {
 ### 在页面中使用
 #### 基础用法
 ```html
-<d-table 
+<d-table
   :request-method="getTableData"
   :show-pagination="false"
 />
@@ -46,6 +46,7 @@ export default {
       return {
         header: [
           //  其他属性继承 el-table-column
+          // 多级表头直接新增 children 字段即可，每次数据渲染为最后一级
           { name: '头1', column: 'column1', align: 'center' },
           { name: '头2', column: 'column2' },
           { name: '头3', column: 'column3' }
@@ -62,7 +63,7 @@ export default {
 
 #### 带插槽用法
 ```html
-<d-table 
+<d-table
   :request-method="getTableData"
   :show-pagination="false"
 >
@@ -120,7 +121,7 @@ export default {
 ## Slots
 > 插槽的设置方式为两种，一种需要在 `header` 的每项中设置 `slotName` 字段，用于注册插槽，另一种插槽名字为 `column` 字段，可直接使用
 ```html
-<d-table 
+<d-table
   :request-method="getTableData"
 >
   <!-- 继承 Element-UI Table 插槽属性 -->

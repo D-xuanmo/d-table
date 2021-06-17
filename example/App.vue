@@ -37,6 +37,10 @@ export default {
             {
               name: '头3-1',
               column: 'column3-1'
+            },
+            {
+              name: '头3-1',
+              column: 'column3-2'
             }
           ]
         }
@@ -46,12 +50,14 @@ export default {
         {
           column1: 'column1',
           column2: '1234567',
-          'column3-1': 1
+          'column3-1': 1,
+          'column3-2': 10
         },
         {
           column1: 'column1',
           column2: 'column2',
-          'column3-1': 2
+          'column3-1': 2,
+          'column3-2': 20
         }
       ]
     }
