@@ -1,5 +1,5 @@
 import { Table, TableColumn, Pagination } from 'element-ui'
-import { moneyFormat, isEmpty } from './utils'
+import { isEmpty, formatterMoney } from '@xuanmo/javascript-utils'
 
 export default {
   name: 'DTable',
@@ -145,7 +145,7 @@ export default {
           /* eslint-disable */
           switch (item.formatType) {
             case 'money':
-              item.formatter = (row, column, cellValue) => `${moneyFormat(cellValue)}`
+              item.formatter = (row, column, cellValue) => `${formatterMoney(cellValue)}`
               break
             case 'percent':
               item.formatter = (row, column, cellValue) => isEmpty(cellValue) ? '' : `${cellValue}%`
